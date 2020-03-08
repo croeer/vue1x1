@@ -4,6 +4,14 @@
     <input type="number" name="answer" placeholder="Ergebnis" @keyup.enter="checkAnswer" v-model="answer"/>
     <p>{{ msg }}</p>
     <p>Richtig: {{ correctAnswers }} - Falsch: {{ wrongAnswers }}</p>
+
+    <section>
+      <ul>
+        <li v-for="l in log" :key="l">
+           {{ l }}
+        </li>
+      </ul>
+    </section>
   </div>
 </template>
 
@@ -60,7 +68,8 @@ export default {
      wrongAnswers: 0,
      msg: '',
      answer: 0,
-     question: null
+     question: null,
+     log: []
     }
   },
   methods: {
@@ -73,6 +82,10 @@ export default {
       this.answer = '';
       this.question = q;
     },
+    appendLog(q,a) {
+      var l = `${q.x}${q.op}${q.y}. Deine Antwort: ${a}. Richtige Antwort: ${q.result}`;
+      this.log.push(l);
+    },
     checkAnswer() {
       if (this.answer == this.question.result) {
         this.correctAnswers += 1;
@@ -81,7 +94,7 @@ export default {
         this.wrongAnswers += 1;
         this.msg = 'Falsch!';
       }
-
+      this.appendLog(this.question, this.answer);
       this.init();
     }
   },
@@ -102,8 +115,7 @@ ul {
   padding: 0;
 }
 li {
-  display: inline-block;
-  margin: 0 10px;
+  font-size: 10px;
 }
 a {
   color: #42b983;

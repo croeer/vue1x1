@@ -4,7 +4,9 @@
     <input type="number" name="answer" placeholder="Ergebnis" @keyup.enter="checkAnswer" v-model="answer"/>
     <p>{{ msg }}</p>
     <p>Richtig: {{ correctAnswers }} - Falsch: {{ wrongAnswers }}</p>
-
+    <section>
+      <button @click="checkAnswer">Überprüfen</button><button @click="reset">Zurücksetzen</button>
+    </section>
     <section>
       <ul>
         <li v-for="l in log" :key="l">
@@ -95,6 +97,13 @@ export default {
         this.msg = 'Falsch!';
       }
       this.appendLog(this.question, this.answer);
+      this.init();
+    },
+    reset() {
+      this.correctAnswers = 0;
+      this.wrongAnswers = 0;
+      this.log = [];
+      this.msg = '';
       this.init();
     }
   },

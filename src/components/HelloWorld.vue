@@ -9,8 +9,8 @@
     </section>
     <section>
       <ul>
-        <li v-for="l in log" :key="l">
-           {{ l }}
+        <li v-for="l in log" :key="l.text" v-bind:class="{ wrong: !l.correct }">
+           {{ l.text }}
         </li>
       </ul>
     </section>
@@ -86,7 +86,8 @@ export default {
     },
     appendLog(q,a) {
       var l = `${q.x}${q.op}${q.y}. Deine Antwort: ${a}. Richtige Antwort: ${q.result}`;
-      this.log.push(l);
+      var c = (q.result == a);
+      this.log.push({text:l, correct:c});
     },
     checkAnswer() {
       if (this.answer == this.question.result) {
@@ -126,6 +127,10 @@ ul {
 li {
   font-size: 10px;
 }
+.wrong {
+  color: #ff0000;
+}
+
 a {
   color: #42b983;
 }

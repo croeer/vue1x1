@@ -1,41 +1,94 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <h1>{{ x }} {{ op }} {{ y }}</h1>
+    <input type="number" name="answer" placeholder="Ergebnis" @keyup.enter="checkAnswer" v-model="answer"/>
+    <p>{{ msg }}</p>
+    <p>Richtig: {{ correctAnswers }} - Falsch: {{ wrongAnswers }}</p>
   </div>
 </template>
 
 <script>
+function rnd(min, max) {
+  return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function initQuestion() {
+  let op = rnd(1,4);
+
+  var opStr = '';
+  var result = 0;
+  var x, y;
+
+  switch (op) {
+    case 1: // Add
+      opStr = '+';
+      x = rnd(1,100);
+      y = rnd(1,100-x);
+      result = x+y;
+      break;
+    case 2: // Sub
+      opStr = '-';
+      x = rnd(1,100);
+      y = rnd(1,x);
+      result = x-y;
+      break;
+    case 3: // Mul
+      opStr = 'x';
+      x = rnd(1,10);
+      y = rnd(1,10);
+      result = x*y;
+      break;
+    case 4: // Div
+      opStr = '/';
+      y = rnd(1,10);
+      x = y*rnd(1,10);
+      result = x/y;
+      break;
+  }
+
+  return { x:x, y:y, op:opStr, result:result};
+}
+
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  data () {
+    return { 
+     op: 'x',
+     x: 1,
+     y: 1,
+     correctAnswers: 0,
+     wrongAnswers: 0,
+     msg: '',
+     answer: 0,
+     question: null
+    }
+  },
+  methods: {
+    init () {
+      var q = initQuestion();
+      this.x = q.x;
+      this.y = q.y;
+      this.op = q.op;
+      //this.msg = q.result;
+      this.answer = '';
+      this.question = q;
+    },
+    checkAnswer() {
+      if (this.answer == this.question.result) {
+        this.correctAnswers += 1;
+        this.msg = 'Richtig!';
+      } else {
+        this.wrongAnswers += 1;
+        this.msg = 'Falsch!';
+      }
+
+      this.init();
+    }
+  },
+  mounted() {
+    this.init();
   }
+
 }
 </script>
 

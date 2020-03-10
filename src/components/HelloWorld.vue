@@ -83,6 +83,8 @@ export default {
       //this.msg = q.result;
       this.answer = '';
       this.question = q;
+      localStorage.correctAnswers = JSON.stringify(this.correctAnswers);
+      localStorage.wrongAnswers = JSON.stringify(this.wrongAnswers);
     },
     appendLog(q,a) {
       var l = `${q.x}${q.op}${q.y}. Deine Antwort: ${a}. Richtige Antwort: ${q.result}`;
@@ -109,6 +111,12 @@ export default {
     }
   },
   mounted() {
+    if (localStorage.wrongAnswers) {
+      this.wrongAnswers = JSON.parse(localStorage.wrongAnswers);
+    }
+    if (localStorage.correctAnswers) {
+      this.correctAnswers = JSON.parse(localStorage.correctAnswers);
+    }
     this.init();
   }
 
@@ -127,6 +135,7 @@ ul {
 li {
   font-size: 10px;
 }
+
 .wrong {
   color: #ff0000;
 }

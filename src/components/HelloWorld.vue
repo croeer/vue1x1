@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ x }} {{ op }} {{ y }}</h1>
-    <input type="number" name="answer" placeholder="Ergebnis" @keyup.enter="checkAnswer" v-model="answer"/>
+    <input type="number" pattern="\d*" name="answer" placeholder="Ergebnis" @keyup.enter="checkAnswer" v-model="answer"/>
     <p>{{ msg }}</p>
     <p>Richtig: {{ correctAnswers }} - Falsch: {{ wrongAnswers }}</p>
     <section>
